@@ -374,3 +374,57 @@ for split, (_, lbl_dir) in split_map.items():
     print(f"    Avg per image   : {counts.mean():.1f}")
     print(f"    Images 1 box    : {(counts == 1).sum()}")
     print(f"    Images 5+ boxes : {(counts >= 5).sum()}")
+
+import random
+import matplotlib.patches as patches
+from PIL import Image
+from pathlib import Path
+import matplotlib.pyplot as plt
+
+labeled_images = [
+    f for f in IMAGE_FRESH.iterdir()
+    if f.suffix.lower() in {'.jpg', '.jpeg', '.png'}
+    and (LABEL_FRESH / (f.stem + ".txt")).exists()
+]
+
+sample = random.sample(labeled_images, min(10, len(labeled_images)))
+print(f"Total labeled images : {len(labeled_images)}")
+print(f"Showing random sample: {len(sample)}\n")
+
+fig, axes = plt.subplots(2, 5, figsize=(20, 9))
+axes = axes.flatten()
+
+for ax, img_path in zip(axes, sample):
+    img  = Image.open(img_path)
+    w, h = img.size
+    ax.imshow(img)
+
+    lf = LABEL_FRESH / (img_path.stem + ".txt")
+    n  = 0
+    for line in lf.read_text().strip().splitlines():
+        _, cx, cy, bw, bh = map(float, line.split())
+        x1 = (cx - bw/2) * w
+        y1 = (cy - bh/2) * h
+        ax.add_patch(patches.Rectangle(
+            (x1, y1), bw*w, bh*h,
+            linewidth=2, edgecolor='lime', facecolor='none'
+        ))
+        n += 1
+
+    ax.set_title(
+        f"{img_path.stem[:18]}\n{n} box{'es' if n>1 else ''}",
+        fontsize=8
+    )
+    ax.axis('off')
+
+plt.suptitle(
+    f"Random sample — {len(sample)} images from {len(labeled_images)} labeled",
+    fontsize=12
+)
+plt.tight_layout()
+plt.savefig(
+    '/content/drive/MyDrive/foto/label_verification.png',
+    dpi=100, bbox_inches='tight'
+)
+plt.show()
+print("Saved → label_verification.png")
