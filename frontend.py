@@ -5,7 +5,7 @@ import io
 from PIL import Image
 import numpy as np
 
-API_URL = "http://localhost:8000"   # change to deployed URL in production
+API_URL = "http://localhost:8000"  
 
 st.set_page_config(page_title="Fabric Roll Detector", layout="wide")
 st.title("🧵 Fabric Roll Detection & Color Variation")
@@ -13,7 +13,7 @@ st.title("🧵 Fabric Roll Detection & Color Variation")
 tab1, tab2, tab3 = st.tabs(["Detect Fabrics", "Extract Colors", "Color Variations"])
 
 
-# ── Tab 1: Detect ─────────────────────────────────────────
+# Tab 1: Detect 
 with tab1:
     st.header("Fabric Detection")
     uploaded = st.file_uploader("Upload an image", type=["jpg","jpeg","png"], key="detect")
@@ -42,7 +42,7 @@ with tab1:
                 st.error(f"API error: {resp.text}")
 
 
-# ── Tab 2: Extract Colors ────────────────────────────────
+# Tab 2: Extract Colors
 with tab2:
     st.header("Color Extraction")
     uploaded_c = st.file_uploader("Upload a group image", type=["jpg","jpeg","png"], key="colors")
@@ -71,7 +71,7 @@ with tab2:
             st.error(f"API error: {resp.text}")
 
 
-# ── Tab 3: Generate Variations ────────────────────────────
+# Tab 3: Generate Variations
 with tab3:
     st.header("Generate Color Variations")
     st.info("Upload a single fabric image and a group image. The app will recolor the single fabric using colors found in the group.")
@@ -115,7 +115,7 @@ with tab3:
                             f"{var['hex']}</div>",
                             unsafe_allow_html=True
                         )
-                        # Download button
+                        #Download button
                         st.download_button(
                             label=f"↓ Download",
                             data=base64.b64decode(var["image_b64"]),
