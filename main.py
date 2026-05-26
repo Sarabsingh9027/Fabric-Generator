@@ -21,12 +21,12 @@ app = FastAPI(title="Fabric Detection API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # tighten in production
+    allow_origins=["*"],   
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ── Load model once at startup ────────────────────────────
+#Load model once at startup 
 MODEL_PATH = "best.pt"
 _original_torch_load = torch.load
 
@@ -45,7 +45,7 @@ finally:
 print(f"Model loaded: {MODEL_PATH}")
 
 
-# ── Helpers ───────────────────────────────────────────────
+# Helpers 
 def read_image(upload: UploadFile) -> np.ndarray:
     data = upload.file.read()
     img = Image.open(io.BytesIO(data)).convert("RGB")
@@ -89,8 +89,7 @@ def nms_boxes(boxes, iou_thresh=0.4):
     return boxes[keep].tolist()
 
 
-# ── Routes ────────────────────────────────────────────────
-
+#Routes
 @app.get("/health")
 def health():
     return {"status": "ok", "model": MODEL_PATH}
@@ -122,7 +121,6 @@ async def detect(file: UploadFile = File(...)):
         boxes = [[pad, pad, W - pad, H - pad]]
         confs = [1.0]
 
-    # Draw annotated image
     annotated = img_np.copy()
     for i, (box, c) in enumerate(zip(boxes, confs)):
         x1, y1, x2, y2 = box
@@ -233,7 +231,7 @@ async def generate_variations(
     }
 
 
-# ── Recolor helper (same as your Colab code) ─────────────
+# Recolor helper 
 def boost_color_saturation(rgb, sat_mult=1.6, min_sat=120):
     px = np.array([[[rgb[2], rgb[1], rgb[0]]]], dtype=np.uint8)
     hsv = cv2.cvtColor(px, cv2.COLOR_BGR2HSV).astype(np.float32)
