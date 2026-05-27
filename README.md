@@ -116,3 +116,10 @@ The FastAPI application exposes the following endpoints:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Runtime Snapshots
+![Colour Detection](model\color-extraction\single-fabric.png)
+![Colour Detection](model\color-extraction\grouped-fabric.png)
+![Colour Extraction](model\color-extraction\single-fabric-extraction.png)
+![Colour Extraction](model\color-extraction\grouped-fabric-colorextraction.png)
+![Colour Variation](model\variation\variation-fabric.png)
